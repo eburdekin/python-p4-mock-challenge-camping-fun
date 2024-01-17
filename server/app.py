@@ -34,9 +34,9 @@ class Campers(Resource):
         return make_response(campers, 200)
 
     def post(self):
-        try:
-            data = request.get_json()
+        data = request.get_json()
 
+        try:
             new_camper = Camper(name=data["name"], age=data["age"])
 
             db.session.add(new_camper)
@@ -60,12 +60,12 @@ class CamperByID(Resource):
         return make_response(camper.to_dict(), 200)
 
     def patch(self, id):
+        camper = Camper.query.filter_by(id=id).one_or_none()
+
+        if camper is None:
+            return make_response({"error": "Camper not found"}, 404)
+
         try:
-            camper = Camper.query.filter_by(id=id).one_or_none()
-
-            if camper is None:
-                return make_response({"error": "Camper not found"}, 404)
-
             data = request.get_json()
 
             for key in data:
@@ -96,12 +96,12 @@ api.add_resource(Activities, "/activities")
 
 class ActivityByID(Resource):
     def delete(self, id):
+        activity = Activity.query.filter_by(id=id).one_or_none()
+
+        if activity is None:
+            return make_response({"error": "Activity not found"}, 404)
+
         try:
-            activity = Activity.query.filter_by(id=id).one_or_none()
-
-            if activity is None:
-                return make_response({"error": "Activity not found"}, 404)
-
             db.session.delete(activity)
             db.session.commit()
 
@@ -115,9 +115,9 @@ api.add_resource(ActivityByID, "/activities/<int:id>")
 
 class Signups(Resource):
     def post(self):
-        try:
-            data = request.get_json()
+        data = request.get_json()
 
+        try:
             new_signup = Signup(
                 camper_id=data["camper_id"],
                 activity_id=data["activity_id"],
