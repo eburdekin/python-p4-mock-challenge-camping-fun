@@ -95,6 +95,20 @@ class Signup(db.Model, SerializerMixin):
             raise ValueError("Time must be between 0 and 23")
         return time
 
+    @validates("camper_id")
+    def validate_camper_id(self, key, camper_id):
+        camper = Camper.query.filter_by(id=camper_id).first()
+        if not camper:
+            raise ValueError("Invalid camper_id")
+        return camper_id
+
+    @validates("activity_id")
+    def validate_activity_id(self, key, activity_id):
+        activity = Activity.query.filter_by(id=activity_id).first()
+        if not activity:
+            raise ValueError("Invalid activity_id")
+        return activity_id
+
     def __repr__(self):
         return f"<Signup {self.id}>"
 
