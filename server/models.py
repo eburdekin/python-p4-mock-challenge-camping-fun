@@ -29,6 +29,8 @@ class Activity(db.Model, SerializerMixin):
         "Signup", back_populates="activity", cascade="all, delete-orphan"
     )
 
+    campers = association_proxy("signups", "camper")
+
     # Add serialization rules
     serialize_rules = ("-signups.activity",)
 
@@ -47,6 +49,8 @@ class Camper(db.Model, SerializerMixin):
     signups = db.relationship(
         "Signup", back_populates="camper", cascade="all, delete-orphan"
     )
+
+    activities = association_proxy("signups", "activity")
 
     # Add serialization rules
     serialize_rules = ("-signups.camper",)
