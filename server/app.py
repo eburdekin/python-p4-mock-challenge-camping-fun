@@ -105,7 +105,7 @@ class ActivityByID(Resource):
             db.session.delete(activity)
             db.session.commit()
 
-            return make_response(jsonify(""), 204)
+            return make_response({}, 204)
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
 
